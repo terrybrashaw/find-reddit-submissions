@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+* + * {
+    margin-top: 12px;
+}
+
+body {
+    width: 360px;
+    padding: 10px;
+    margin: 0;
+}
+
+a {
+    font: inherit;
+    color: inherit;
+    font-style: inherit;
+    text-decoration: inherit;
+}
+
+/* A single submitted post on Reddit. */
+.post {
+    display: flex;
+    flex: nowrap;
+    /* grid-template-columns: 15% auto; */
+    /* grid-template-areas: "score | post"; */
+}
+
+.comments {
+    display: inline;
+}
+.comments::before {
+    content: "";
+    background-image: url("../img/comment.svg");
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    padding-right: 3px;
+}
+
+.stats {
+    margin: 0;
+    width: 100px;
+    /* background: grey; */
+    min-width: 100px;
+}
+
+.info {
+    margin-top: 0;
+}
+
+.info > h1 {
+    display: block;
+    font: 14px serif;
+}
+
+.info > h2 {
+    margin-top: 2px;
+    display: block;
+    font: 12px serif;
+    color: grey;
+}
+
