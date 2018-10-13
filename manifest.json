@@ -1,10 +1,10 @@
 {
 
     "manifest_version": 2,
-    "name": "Find Reddit Submissions",
+    "name": "Snooper",
     "version": "0.1",
-    "description": "Find previous Reddit submissions of the page you're viewing.",
-    "homepage_url": "https://github.com/terrybrashaw/find-reddit-submissions",
+    "description": "Find Reddit submissions of the page you're viewing.",
+    "homepage_url": "https://github.com/terrybrashaw/snooper",
     "icons": {
         "48": "img/reddit.svg",
         "96": "img/reddit.svg"
@@ -15,7 +15,7 @@
     ],
     "browser_action": {
         "default_icon": "img/reddit.svg",
-        "default_title": "Find Reddit Submissions",
+        "default_title": "Snooper - Find Reddit Submissions",
         "default_popup": "src/index.html",
         "default_area": "navbar"
     }

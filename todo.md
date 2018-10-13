@@ -2,3 +2,4 @@
 - I think I should always search the exact current url, and then do some extra queries if the hostname is accurate.
 - Dark and light themes.
 - Background preloading.
+- theme.getCurrent()

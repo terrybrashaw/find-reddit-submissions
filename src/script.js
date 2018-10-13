@@ -31,40 +31,46 @@ async function get_posts() {
     let url = new URL(current_tab[0].url);
 
     let responses = [];
-    // responses.push(fetch_reddit_info(url));
-    // responses.push(fetch_reddit_info(`${url.host}${url.pathname}${url.search}`));
+    responses.push(fetch_reddit_info(`${url.host}${url.pathname}${url.search}`));
     responses.push(fetch_reddit_info(`https://${url.host}${url.pathname}${url.search}`));
     responses.push(fetch_reddit_info(`http://${url.host}${url.pathname}${url.search}`));
 
+    // In addition to querying the info of a specific URL, use Reddit's
+    // search API to find other matches
     if(url.host === "www.youtube.com" || url.host === "youtube.com") {
         const YOUTUBE_ID_REGEX = /youtube.com\/watch.*?v=([a-zA-Z0-9_-]{11})/i;
         let ids = url.toString().match(YOUTUBE_ID_REGEX);
-        if(ids.length > 0) {
+        if(ids !== null) {
             responses.push(fetch_reddit_search(`url:${ids[1]}`));
         }
     } else if(url.host === "www.youtu.be" || url.host === "youtu.be") {
         const YOUTUBE_SHORT_ID_REGEX = /youtu.be\/([a-zA-Z0-9_-]{11})/i;
         let ids = url.toString().match(YOUTUBE_SHORT_ID_REGEX);
-        if(ids.length > 0) {
+        if(ids !== null) {
             responses.push(fetch_reddit_search(`url:${ids[1]}`));
         }
-    } else if(url.host === "www.liveleak.com") {
+    } else if(url.host === "www.liveleak.com" || url.host === "liveleak.com") {
         const LIVELEAK_ID_REGEX = /liveleak.com\/.*?t=([a-zA-Z0-9_-]*?)(?:\&|$)/i;
         let ids = url.toString().match(LIVELEAK_ID_REGEX);
-        if(ids.length > 0) {
+        if(ids !== null) {
             responses.push(fetch_reddit_search(`url:${ids[1]}`));
         }
     }
 
-    let posts = [];
+    // Collect all the responses in an object, indexed by their unique ID.
+    // This is done to avoid listing duplicate posts.
+    let posts = {};
     for(let i = 0; i < responses.length; i++) {
-        let response = await (await responses[i]).json();
+        let response_text = await responses[i];
+        let response = await response_text.json();
         for(let i = 0; i < response.data.children.length; i++) {
-            posts.push(response.data.children[i]);
+            let post = response.data.children[i].data;
+            posts[post.id] = post;
         }
     }
 
-    return posts;
+    // Return the 'hashmap' of posts as an array of posts.
+    return Object.values(posts);
 }
 
 async function render_posts(posts) {
@@ -73,10 +79,13 @@ async function render_posts(posts) {
         document.getElementById("popup-content").style.display = "none";
         return;
     }
-    posts.sort((a, b) => b.data.num_comments - a.data.num_comments);
+    
+    // Sort posts in descending order by number of comments.
+    posts.sort((a, b) => b.num_comments - a.num_comments);
+
     let rendered_posts = [];
     for(let i = 0; i < posts.length; i++) {
-        let post = posts[i].data;
+        let post = posts[i];
         let author;
         if(post.author === "[deleted]") {
             author = "[deleted]";
