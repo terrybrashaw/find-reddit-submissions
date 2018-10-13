@@ -2,7 +2,7 @@
 
     "manifest_version": 2,
     "name": "Snooper",
-    "version": "0.1",
+    "version": "1.0",
     "description": "Find Reddit submissions of the page you're viewing.",
     "homepage_url": "https://github.com/terrybrashaw/snooper",
     "icons": {
